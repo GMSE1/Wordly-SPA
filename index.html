@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Wordly - Interactive dictionary for language learners. Search, learn, and save your favorite words.">
+    <title>Wordly - Interactive Language Learning Dictionary</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Background Decoration -->
+    <div class="bg-decoration"></div>
+    
+    <!-- Main Application Container -->
+    <div class="app-container">
+        
+        <!-- Header Section -->
+        <header class="header" role="banner">
+            <div class="header-content">
+                <h1 class="brand">
+                    <span class="brand-icon" aria-hidden="true">📖</span>
+                    <span class="brand-name">Word<span class="brand-accent">ly</span></span>
+                </h1>
+                <p class="brand-tagline">Master language, one word at a time</p>
+            </div>
+            
+            <!-- Theme Toggle Button -->
+            <button 
+                id="themeToggle" 
+                class="theme-toggle-btn" 
+                aria-label="Toggle dark mode"
+                title="Switch theme">
+                <span class="theme-icon" aria-hidden="true">🌙</span>
+            </button>
+        </header>
+
+        <!-- Search Section -->
+        <section class="search-section" role="search">
+            <form id="searchForm" class="search-form" autocomplete="off">
+                <div class="search-input-wrapper">
+                    <span class="search-icon" aria-hidden="true">🔍</span>
+                    <input 
+                        type="text" 
+                        id="wordInput" 
+                        class="search-input"
+                        placeholder="Type a word to explore..."
+                        aria-label="Search for a word"
+                        required
+                        autocomplete="off"
+                        spellcheck="false"
+                    >
+                    <button type="submit" class="search-submit-btn">
+                        <span>Search</span>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Quick Action Buttons -->
+            <nav class="quick-actions" aria-label="Quick actions">
+                <button class="quick-action-btn" id="randomWordBtn" title="Get a random word">
+                    <span class="btn-icon" aria-hidden="true">🎲</span>
+                    <span class="btn-text">Random</span>
+                </button>
+                <button class="quick-action-btn" id="historyBtn" title="View search history">
+                    <span class="btn-icon" aria-hidden="true">📜</span>
+                    <span class="btn-text">History</span>
+                </button>
+                <button class="quick-action-btn" id="favoritesBtn" title="View favorite words">
+                    <span class="btn-icon" aria-hidden="true">⭐</span>
+                    <span class="btn-text">Favorites</span>
+                </button>
+            </nav>
+        </section>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-state hidden" role="status" aria-live="polite">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Searching dictionary...</p>
+        </div>
+
+        <!-- Error Message -->
+        <div id="errorContainer" class="error-container hidden" role="alert" aria-live="assertive">
+            <div class="error-card">
+                <span class="error-icon" aria-hidden="true">⚠️</span>
+                <div class="error-content">
+                    <h3 id="errorTitle" class="error-title">Error</h3>
+                    <p id="errorMessage" class="error-message"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Word Display Section -->
+        <main id="wordDisplay" class="word-display hidden" role="main">
+            
+            <!-- Word Header Card -->
+            <article class="word-card">
+                <div class="word-header">
+                    <div class="word-title-section">
+                        <h2 id="wordTitle" class="word-title"></h2>
+                        <button 
+                            id="favoriteBtn" 
+                            class="favorite-btn" 
+                            aria-label="Toggle favorite"
+                            title="Add to favorites">
+                            <span class="star-icon" aria-hidden="true">☆</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Phonetics -->
+                    <div id="phoneticsContainer" class="phonetics-container">
+                        <span id="phoneticText" class="phonetic-text"></span>
+                        <button 
+                            id="audioBtn" 
+                            class="audio-btn hidden"
+                            aria-label="Play pronunciation"
+                            title="Listen to pronunciation">
+                            <span class="audio-icon" aria-hidden="true">🔊</span>
+                            <span>Listen</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Word Meanings -->
+                <div id="meaningsContainer" class="meanings-container">
+                    <!-- Meanings will be dynamically inserted -->
+                </div>
+
+                <!-- Related Words Section -->
+                <div id="relatedWordsSection" class="related-words-section">
+                    <!-- Synonyms -->
+                    <div id="synonymsContainer" class="related-container hidden">
+                        <h3 class="related-heading">
+                            <span class="related-icon" aria-hidden="true">🔄</span>
+                            <span>Similar Words</span>
+                        </h3>
+                        <div id="synonymsList" class="related-words-list"></div>
+                    </div>
+
+                    <!-- Antonyms -->
+                    <div id="antonymsContainer" class="related-container hidden">
+                        <h3 class="related-heading">
+                            <span class="related-icon" aria-hidden="true">↔️</span>
+                            <span>Opposite Words</span>
+                        </h3>
+                        <div id="antonymsList" class="related-words-list"></div>
+                    </div>
+                </div>
+
+                <!-- Source Attribution -->
+                <footer class="word-footer">
+                    <p class="source-text">Source:</p>
+                    <a 
+                        id="sourceLink" 
+                        href="#" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        class="source-link">
+                        View on Wiktionary
+                    </a>
+                </footer>
+            </article>
+        </main>
+
+        <!-- History Sidebar -->
+        <aside id="historySidebar" class="sidebar hidden" role="complementary" aria-label="Search history">
+            <div class="sidebar-header">
+                <h3 class="sidebar-title">Search History</h3>
+                <button 
+                    id="closeHistoryBtn" 
+                    class="sidebar-close-btn"
+                    aria-label="Close history">
+                    ✕
+                </button>
+            </div>
+            <div class="sidebar-body">
+                <ul id="historyList" class="sidebar-list">
+                    <!-- History items will be inserted dynamically -->
+                </ul>
+                <button id="clearHistoryBtn" class="sidebar-clear-btn">
+                    Clear All History
+                </button>
+            </div>
+        </aside>
+
+        <!-- Favorites Sidebar -->
+        <aside id="favoritesSidebar" class="sidebar hidden" role="complementary" aria-label="Favorite words">
+            <div class="sidebar-header">
+                <h3 class="sidebar-title">Your Favorites</h3>
+                <button 
+                    id="closeFavoritesBtn" 
+                    class="sidebar-close-btn"
+                    aria-label="Close favorites">
+                    ✕
+                </button>
+            </div>
+            <div class="sidebar-body">
+                <ul id="favoritesList" class="sidebar-list">
+                    <!-- Favorite items will be inserted dynamically -->
+                </ul>
+                <button id="clearFavoritesBtn" class="sidebar-clear-btn">
+                    Clear All Favorites
+                </button>
+            </div>
+        </aside>
+
+        <!-- Sidebar Overlay -->
+        <div id="sidebarOverlay" class="sidebar-overlay hidden" aria-hidden="true"></div>
+
+        <!-- App Footer -->
+        <footer class="app-footer">
+            <p class="footer-credits">
+                Powered by <a href="https://dictionaryapi.dev/" target="_blank" rel="noopener noreferrer">Free Dictionary API</a>
+            </p>
+            <p class="footer-hint">
+                💡 <strong>Learning Tip:</strong> Try exploring words like "eloquent", "resilient", or "serendipity"
+            </p>
+        </footer>
+    </div>
+
+    <!-- Hidden Audio Element -->
+    <audio id="wordAudio" preload="none"></audio>
+
+    <!-- JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>
